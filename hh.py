@@ -32,6 +32,7 @@ def hh_parse(base_url, headers):
 
 
 			pprint.pprint(jobs)
+			print("Hello Marina")
 	else:
 		print('ERROR')
 
