@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup as bs
 headers = {'accept':'*/*', 'user-agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36 OPR/63.0.3368.107'}
 
 
-base_url = 'https://hh.ru/search/vacancy?area=77&search_period=3&text=python&page=0'
+base_url = 'https://hh.ru/search/vacancy?area=1&search_period=3&text=python&page=0'
 
 
 def hh_parse(base_url, headers):
@@ -21,7 +21,7 @@ def hh_parse(base_url, headers):
 			pagination = soup.find_all('a', attrs={'data-qa':'pager-page'})
 			count = int(pagination[-1].text)
 			for i  in range(count):
-				url = f'https://hh.ru/search/vacancy?area=77&search_period=3&text=python&page={i}'
+				url = f'https://hh.ru/search/vacancy?area=1&search_period=3&text=python&page={i}'
 				if url not in urls:
 					urls.append(url)
 		except:
