@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup as bs
 headers = {'accept':'*/*', 'user-agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36 OPR/63.0.3368.107'}
 
 
-base_url = 'https://hh.ru/search/vacancy?area=1&search_period=3&text=python&page=0'
+base_url = 'https://hh.ru/search/vacancy?area=77&search_period=3&text=python&page=0'
 
 
 def hh_parse(base_url, headers):
@@ -21,7 +21,7 @@ def hh_parse(base_url, headers):
 			pagination = soup.find_all('a', attrs={'data-qa':'pager-page'})
 			count = int(pagination[-1].text)
 			for i  in range(count):
-				url = f'https://hh.ru/search/vacancy?area=1&search_period=3&text=python&page={i}'
+				url = f'https://hh.ru/search/vacancy?area=77&search_period=3&text=python&page={i}'
 				if url not in urls:
 					urls.append(url)
 		except:
@@ -39,11 +39,15 @@ def hh_parse(base_url, headers):
 				text1 = div.find('div', attrs={'data-qa':'vacancy-serp__vacancy_snippet_responsibility'}).text
 				text2 = div.find('div', attrs={'data-qa':'vacancy-serp__vacancy_snippet_requirement'}).text
 				content = text1 + ' ' + text2
+				salary = div.find('div', attrs={'data-qa':'vacancy-serp__vacancy-compensation'}).text
+				city = div.find('span', attrs={'data-qa':'vacancy-serp__vacancy-address'}).text
 				jobs.append({
 					'title':title,
 					'href':href,
 					'company':company,
-					'content':content
+					'content':content,
+					'salary':salary,
+					'city':city,
 					})
 			except:
 				pass
@@ -55,9 +59,9 @@ def hh_parse(base_url, headers):
 def files_writer(jobs):
 	with open('parsed_jobs.csv', 'w')as file:
 		a_pen = csv.writer(file)
-		a_pen.writerow(('Title vacancy', 'URL', 'Name of company', 'Content vacancy'))
+		a_pen.writerow(('City','Title vacancy','Salary', 'URL', 'Name of company', 'Content vacancy'))
 		for job in jobs:
-			a_pen.writerow((job['title'], job['href'], job['company'], job['content']))
+			a_pen.writerow((job['city'], job['title'], job['salary'], job['href'], job['company'], job['content']))
 
 
 jobs = hh_parse(base_url, headers)
